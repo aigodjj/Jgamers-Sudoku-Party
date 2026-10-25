@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+:root { color-scheme: light; font-synthesis: none; text-rendering: optimizeLegibility; }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; font-family: ui-rounded, "Avenir Next", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif; }
+button, a { -webkit-tap-highlight-color: transparent; }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid #c4b5fd; outline-offset: 2px; }
+::selection { background: #ddd6fe; color: #4c1d95; }
+
+.app-shell { background: radial-gradient(ellipse at top, #f4eaff 0%, #fff8fc 44%, #f3f7ff 100%); }
+.site-header { background-color: rgb(255 250 255 / 0.9); }
+html[data-theme="dark"] body { background: #111827; color: #e5e7eb; }
+html[data-theme="dark"] .app-shell { background: #111827; }
+html[data-theme="dark"] .site-header { background-color: rgb(17 24 39 / 0.92); border-color: #374151; }
+html[data-theme="dark"] .bg-white, html[data-theme="dark"] .bg-white\/90 { background-color: #1f2937 !important; }
+html[data-theme="dark"] .bg-slate-50, html[data-theme="dark"] .bg-slate-100 { background-color: #273449 !important; }
+html[data-theme="dark"] .text-slate-800, html[data-theme="dark"] .text-slate-700 { color: #f3f4f6 !important; }
+html[data-theme="dark"] .text-slate-600, html[data-theme="dark"] .text-slate-500 { color: #cbd5e1 !important; }
+html[data-theme="dark"] .border-slate-100, html[data-theme="dark"] .border-white { border-color: #374151 !important; }
