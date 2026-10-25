@@ -22,6 +22,7 @@ const navItems = [
   { href: "/multiplayer", key: "nav.multiplayer", Icon: Swords, color: "pink" },
   { href: "/wardrobe", key: "nav.wardrobe", Icon: Shirt, color: "purple" },
   { href: "/achievements", key: "nav.achievements", Icon: Trophy, color: "yellow" },
+  { href: "/leaderboard", key: "nav.leaderboard", Icon: Trophy, color: "yellow" },
   { href: "/profile", key: "nav.profile", Icon: UserRound, color: "green" },
   { href: "/settings", key: "nav.settings", Icon: Settings, color: "blue" },
 ];
