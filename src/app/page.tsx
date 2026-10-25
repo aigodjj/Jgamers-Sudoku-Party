@@ -328,6 +328,32 @@ export default function HomePage() {
               </Link>
             ),
           )}
+          
+          <Link
+            href="/leaderboard"
+            className="group relative flex min-h-28 items-center gap-3 overflow-hidden rounded-3xl border-2 border-yellow-200 bg-white p-4 shadow-sm shadow-yellow-200 transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
+          >
+            <div className="grid size-14 shrink-0 place-items-center rounded-2xl border-2 border-white bg-gradient-to-br from-yellow-300 to-amber-500 text-white shadow-md transition-transform duration-200 group-hover:rotate-3 group-hover:scale-105">
+              <Trophy size={25} strokeWidth={2.5} />
+            </div>
+
+            <div className="min-w-0 flex-1">
+              <span className="mb-1 block text-[9px] font-black tracking-widest text-amber-500">
+                LEADERBOARD
+              </span>
+              <span className="block text-sm font-black leading-snug text-slate-800">
+                排行榜
+              </span>
+            </div>
+
+            <ArrowRight
+              size={17}
+              className="shrink-0 text-slate-300 transition-all group-hover:translate-x-1 group-hover:text-amber-500"
+            />
+
+            <div className="pointer-events-none absolute -bottom-5 -right-4 size-16 rounded-full bg-yellow-50/80 transition-transform group-hover:scale-150" />
+          </Link>
+
         </div>
       </section>
 
