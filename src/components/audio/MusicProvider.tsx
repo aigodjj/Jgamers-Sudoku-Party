@@ -1,4 +1,3 @@
-
 "use client";
 
 import {
@@ -37,19 +36,24 @@ type MusicContextValue = {
 const MusicContext = createContext<MusicContextValue | null>(null);
 
 const VOLUME_KEY = "jgamers-music-volume";
-const ENABLED_KEY = "jgamers-music-enabled";
 const TRACK_KEY = "jgamers-music-track";
+const ENABLED_KEY = "jgamers-music-enabled";
 
 export function MusicProvider({ children }: { children: ReactNode }) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  // 預設進入遊戲時嘗試自動播放。
+  const shouldPlayRef = useRef(true);
+
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolumeState] = useState(0.8);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [hydrated, setHydrated] = useState(false);
 
-  const currentTrack =
-    PLAYLIST[currentTrackIndex] ?? PLAYLIST[0];
+  const currentTrack = PLAYLIST[currentTrackIndex] ?? PLAYLIST[0];
 
+  // 讀取玩家之前儲存的音量與曲目。
+  // 每次進入遊戲都預設嘗試播放，不受之前暫停狀態影響。
   useEffect(() => {
     try {
       const savedVolume = localStorage.getItem(VOLUME_KEY);
@@ -57,6 +61,7 @@ export function MusicProvider({ children }: { children: ReactNode }) {
 
       if (savedVolume !== null) {
         const parsed = Number(savedVolume);
+
         if (Number.isFinite(parsed)) {
           setVolumeState(Math.min(1, Math.max(0, parsed)));
         }
@@ -64,6 +69,7 @@ export function MusicProvider({ children }: { children: ReactNode }) {
 
       if (savedTrack !== null) {
         const parsed = Number(savedTrack);
+
         if (
           Number.isInteger(parsed) &&
           parsed >= 0 &&
@@ -72,13 +78,18 @@ export function MusicProvider({ children }: { children: ReactNode }) {
           setCurrentTrackIndex(parsed);
         }
       }
+
+      // 下次進入遊戲時，預設重新啟動 BGM。
+      localStorage.setItem(ENABLED_KEY, "true");
     } catch {
-      // localStorage may be unavailable.
+      // localStorage 可能無法使用。
     }
 
+    shouldPlayRef.current = true;
     setHydrated(true);
   }, []);
 
+  // 設定音量，並記住玩家的選擇。
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -89,35 +100,46 @@ export function MusicProvider({ children }: { children: ReactNode }) {
       try {
         localStorage.setItem(VOLUME_KEY, String(volume));
       } catch {
-        // Ignore storage errors.
+        // 忽略儲存錯誤。
       }
     }
   }, [volume, hydrated]);
 
+  // 記住目前曲目。
   useEffect(() => {
     if (!hydrated) return;
 
     try {
       localStorage.setItem(TRACK_KEY, String(currentTrackIndex));
     } catch {
-      // Ignore storage errors.
+      // 忽略儲存錯誤。
     }
   }, [currentTrackIndex, hydrated]);
 
-  // 切歌時更新音源；若原本正在播放，就接著播放下一首。
+  // 初次進入、自動切歌或手動切歌時載入曲目並嘗試播放。
   useEffect(() => {
     const audio = audioRef.current;
-    if (!audio || !hydrated || !isPlaying) return;
 
+    if (!audio || !hydrated) return;
+
+    audio.volume = volume;
     audio.load();
+
+    if (!shouldPlayRef.current) return;
+
     audio.play().catch((error: unknown) => {
       setIsPlaying(false);
-      console.warn("Background music playback failed.", error);
+
+      console.warn(
+        "背景音樂無法自動播放。請確認音檔存在，或點擊播放按鈕啟動音樂。",
+        error,
+      );
     });
-  }, [currentTrackIndex, hydrated]); // 刻意不監聽 isPlaying
+  }, [currentTrackIndex, hydrated]);
 
   const setVolume = useCallback((nextVolume: number) => {
     if (!Number.isFinite(nextVolume)) return;
+
     setVolumeState(Math.min(1, Math.max(0, nextVolume)));
   }, []);
 
@@ -126,72 +148,84 @@ export function MusicProvider({ children }: { children: ReactNode }) {
     if (!audio) return;
 
     if (!audio.paused) {
+      shouldPlayRef.current = false;
       audio.pause();
       setIsPlaying(false);
 
       try {
         localStorage.setItem(ENABLED_KEY, "false");
       } catch {
-        // Ignore storage errors.
+        // 忽略儲存錯誤。
       }
+
       return;
     }
 
+    shouldPlayRef.current = true;
+
     try {
       await audio.play();
+
       setIsPlaying(true);
 
       try {
         localStorage.setItem(ENABLED_KEY, "true");
       } catch {
-        // Ignore storage errors.
+        // 忽略儲存錯誤。
       }
     } catch (error) {
       setIsPlaying(false);
+
       console.warn(
-        "Background music could not start. Check the audio files and browser autoplay policy.",
+        "背景音樂無法播放。請確認音檔存在，並檢查瀏覽器的自動播放限制。",
         error,
       );
     }
   }, []);
 
-  const playTrack = useCallback(async (index: number) => {
-    if (!Number.isInteger(index) || index < 0 || index >= PLAYLIST.length) {
-      return;
-    }
+  const playTrack = useCallback(
+    async (index: number) => {
+      if (
+        !Number.isInteger(index) ||
+        index < 0 ||
+        index >= PLAYLIST.length
+      ) {
+        return;
+      }
 
-    const audio = audioRef.current;
-    if (!audio) return;
+      const audio = audioRef.current;
+      if (!audio) return;
 
-    if (index === currentTrackIndex) {
-      if (audio.paused) {
+      shouldPlayRef.current = true;
+
+      if (index === currentTrackIndex) {
         try {
           await audio.play();
           setIsPlaying(true);
+
+          try {
+            localStorage.setItem(ENABLED_KEY, "true");
+          } catch {
+            // 忽略儲存錯誤。
+          }
         } catch (error) {
           setIsPlaying(false);
-          console.warn("Background music playback failed.", error);
+          console.warn("背景音樂播放失敗。", error);
         }
+
+        return;
       }
-      return;
-    }
 
-    setCurrentTrackIndex(index);
+      try {
+        localStorage.setItem(ENABLED_KEY, "true");
+      } catch {
+        // 忽略儲存錯誤。
+      }
 
-    // 讓新曲目載入後開始播放。
-    audio.pause();
-    setIsPlaying(false);
-
-    try {
-      localStorage.setItem(ENABLED_KEY, "true");
-    } catch {
-      // Ignore storage errors.
-    }
-
-    // 切換索引後由下一個 effect 載入曲目。
-    // 對手動選曲，使用者點擊即代表播放意圖。
-    setIsPlaying(true);
-  }, [currentTrackIndex]);
+      setCurrentTrackIndex(index);
+    },
+    [currentTrackIndex],
+  );
 
   return (
     <MusicContext.Provider
@@ -215,6 +249,8 @@ export function MusicProvider({ children }: { children: ReactNode }) {
         onPlay={() => setIsPlaying(true)}
         onPause={() => setIsPlaying(false)}
         onEnded={() => {
+          // 播完後自動播放下一首，最後一首播完則回到第一首。
+          shouldPlayRef.current = true;
           setCurrentTrackIndex((index) => (index + 1) % PLAYLIST.length);
         }}
         onError={() => {
