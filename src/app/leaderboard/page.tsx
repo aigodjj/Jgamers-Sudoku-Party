@@ -119,7 +119,7 @@ export default function LeaderboardPage() {
                   }`}
                 >
                   <div
-                    className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl text-lg font-black ${
+                    className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl font-number text-lg font-black ${
                       index === 0
                         ? "bg-amber-300 text-amber-950 shadow-md shadow-amber-200"
                         : index === 1
@@ -136,7 +136,7 @@ export default function LeaderboardPage() {
                     <p className="truncate font-extrabold text-slate-800">
                       {player.username || "Player"}
                     </p>
-                    <p className="mt-1 text-xs text-slate-500 sm:text-sm">
+                    <p className="mt-1 font-number text-xs text-slate-500 sm:text-sm">
                       已完成 {player.matchesCompleted} 場 · 勝場{" "}
                       {player.wins}
                     </p>

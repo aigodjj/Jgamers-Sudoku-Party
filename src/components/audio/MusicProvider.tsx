@@ -39,11 +39,21 @@ const VOLUME_KEY = "jgamers-music-volume";
 const TRACK_KEY = "jgamers-music-track";
 const ENABLED_KEY = "jgamers-music-enabled";
 
+function isNotAllowedError(error: unknown) {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "name" in error &&
+    error.name === "NotAllowedError"
+  );
+}
+
 export function MusicProvider({ children }: { children: ReactNode }) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // 預設進入遊戲時嘗試自動播放。
+  // Start automatically after the browser has received a user gesture.
   const shouldPlayRef = useRef(true);
+  const hasPlaybackPermissionRef = useRef(false);
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolumeState] = useState(0.8);
@@ -116,7 +126,7 @@ export function MusicProvider({ children }: { children: ReactNode }) {
     }
   }, [currentTrackIndex, hydrated]);
 
-  // 初次進入、自動切歌或手動切歌時載入曲目並嘗試播放。
+  // Load tracks immediately, but only autoplay after playback was user-enabled.
   useEffect(() => {
     const audio = audioRef.current;
 
@@ -125,17 +135,50 @@ export function MusicProvider({ children }: { children: ReactNode }) {
     audio.volume = volume;
     audio.load();
 
-    if (!shouldPlayRef.current) return;
+    if (!shouldPlayRef.current || !hasPlaybackPermissionRef.current) return;
 
     audio.play().catch((error: unknown) => {
       setIsPlaying(false);
 
-      console.warn(
-        "背景音樂無法自動播放。請確認音檔存在，或點擊播放按鈕啟動音樂。",
-        error,
-      );
+      if (!isNotAllowedError(error)) {
+        console.warn("背景音樂無法自動播放。", error);
+      }
     });
   }, [currentTrackIndex, hydrated]);
+
+  // Browsers may block playback until a pointer or keyboard gesture occurs.
+  useEffect(() => {
+    const audio = audioRef.current;
+
+    if (!audio || !hydrated || isPlaying || !shouldPlayRef.current) return;
+
+    const startAfterInteraction = (event: Event) => {
+      if (
+        event.target instanceof Element &&
+        event.target.closest("[data-music-control]")
+      ) {
+        return;
+      }
+
+      if (!shouldPlayRef.current || !audio.paused) return;
+
+      audio.play().catch((error: unknown) => {
+        setIsPlaying(false);
+
+        if (!isNotAllowedError(error)) {
+          console.warn("背景音樂無法播放。", error);
+        }
+      });
+    };
+
+    document.addEventListener("pointerdown", startAfterInteraction);
+    document.addEventListener("keydown", startAfterInteraction);
+
+    return () => {
+      document.removeEventListener("pointerdown", startAfterInteraction);
+      document.removeEventListener("keydown", startAfterInteraction);
+    };
+  }, [hydrated, isPlaying]);
 
   const setVolume = useCallback((nextVolume: number) => {
     if (!Number.isFinite(nextVolume)) return;
@@ -176,10 +219,9 @@ export function MusicProvider({ children }: { children: ReactNode }) {
     } catch (error) {
       setIsPlaying(false);
 
-      console.warn(
-        "背景音樂無法播放。請確認音檔存在，並檢查瀏覽器的自動播放限制。",
-        error,
-      );
+      if (!isNotAllowedError(error)) {
+        console.warn("背景音樂無法播放。", error);
+      }
     }
   }, []);
 
@@ -210,7 +252,9 @@ export function MusicProvider({ children }: { children: ReactNode }) {
           }
         } catch (error) {
           setIsPlaying(false);
-          console.warn("背景音樂播放失敗。", error);
+          if (!isNotAllowedError(error)) {
+            console.warn("背景音樂播放失敗。", error);
+          }
         }
 
         return;
@@ -246,7 +290,10 @@ export function MusicProvider({ children }: { children: ReactNode }) {
         ref={audioRef}
         src={currentTrack.src}
         preload="auto"
-        onPlay={() => setIsPlaying(true)}
+        onPlay={() => {
+          hasPlaybackPermissionRef.current = true;
+          setIsPlaying(true);
+        }}
         onPause={() => setIsPlaying(false)}
         onEnded={() => {
           // 播完後自動播放下一首，最後一首播完則回到第一首。

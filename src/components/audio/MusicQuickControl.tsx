@@ -10,6 +10,7 @@ export function MusicQuickControl() {
   return (
     <button
       type="button"
+      data-music-control
       onClick={() => void togglePlayback()}
       aria-label={isPlaying ? "Pause background music" : "Play background music"}
       title={isPlaying ? "Pause background music" : "Play background music"}

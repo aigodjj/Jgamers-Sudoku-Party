@@ -242,6 +242,7 @@ export default function SettingsPage() {
           <div className="mt-5 flex flex-col gap-5 rounded-2xl bg-slate-50 p-4 sm:flex-row sm:items-center">
             <button
               type="button"
+              data-music-control
               onClick={() => void togglePlayback()}
               aria-label={isPlaying ? "暫停背景音樂" : "播放背景音樂"}
               className="flex shrink-0 items-center justify-center gap-2 rounded-2xl bg-violet-500 px-5 py-3 font-extrabold text-white shadow-[0_3px_0_#6d28d9] transition hover:bg-violet-600 active:translate-y-0.5 active:shadow-none"

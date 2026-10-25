@@ -57,7 +57,7 @@ export function Navbar() {
             <strong className="block text-sm font-black tracking-tight text-slate-800">
               {t("app.name")}
             </strong>
-            <span className="mt-0.5 block text-[11px] font-bold text-sky-600">
+            <span className="mt-0.5 block text-xs font-bold text-sky-600">
               {t("app.tagline")}
             </span>
           </span>

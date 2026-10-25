@@ -1,6 +1,11 @@
 
 "use client";
 
+import {
+  homeBodyFont,
+  homeDisplayFont,
+  homeNumberFont,
+} from "./home-fonts";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
@@ -124,7 +129,7 @@ export default function HomePage() {
     : 0;
 
   return (
-    <PageWrapper className="space-y-7 pb-8">
+    <PageWrapper className={`${homeBodyFont} space-y-7 pb-8`}>
       {error && (
         <div
           role="alert"
@@ -151,7 +156,7 @@ export default function HomePage() {
                 {t("app.tagline")}
               </div>
 
-              <h1 className="max-w-2xl text-3xl font-black leading-tight tracking-tight text-white drop-shadow-sm sm:text-4xl lg:text-5xl">
+              <h1 className={`${homeDisplayFont} max-w-2xl text-3xl font-bold leading-tight tracking-tight text-white drop-shadow-sm sm:text-4xl lg:text-5xl`}>
                 {t("home.greeting", { name: data.profile.username })}
               </h1>
 
@@ -208,7 +213,7 @@ export default function HomePage() {
                   <div className="text-xs font-bold text-slate-500">
                     {t("home.coins")}
                   </div>
-                  <div className="text-xl font-black tabular-nums text-slate-800">
+                  <div className={`${homeNumberFont} text-xl font-bold tabular-nums text-slate-800`}>
                     {data.profile.coins.toLocaleString()}
                   </div>
                 </div>
@@ -311,7 +316,7 @@ export default function HomePage() {
                 </div>
 
                 <div className="min-w-0 flex-1">
-                  <span className="mb-1 block text-[9px] font-black tracking-widest text-slate-400">
+                  <span className="mb-1 block text-[10px] font-black tracking-widest text-slate-400">
                     {label}
                   </span>
                   <span className="block text-sm font-black leading-snug text-slate-800">
@@ -338,7 +343,7 @@ export default function HomePage() {
             </div>
 
             <div className="min-w-0 flex-1">
-              <span className="mb-1 block text-[9px] font-black tracking-widest text-amber-500">
+              <span className="mb-1 block text-[10px] font-black tracking-widest text-amber-500">
                 LEADERBOARD
               </span>
               <span className="block text-sm font-black leading-snug text-slate-800">

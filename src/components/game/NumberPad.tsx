@@ -52,7 +52,7 @@ export function NumberPad({
               items-center justify-center
               rounded-xl border-2 border-white/90
               bg-gradient-to-b ${digitColors[i]}
-              py-1.5 text-lg font-black text-white
+              py-1.5 font-number text-lg font-black text-white
               shadow-[0_3px_0_rgba(30,64,175,0.18)]
               transition duration-150
               hover:-translate-y-0.5 hover:brightness-105
@@ -67,7 +67,7 @@ export function NumberPad({
             <span className="drop-shadow-sm">{i + 1}</span>
 
             {remainingByDigit && (
-              <span className="text-[9px] font-bold leading-tight text-white/80 sm:text-[10px]">
+              <span className="text-[10px] font-bold leading-tight text-white/80 sm:text-[11px]">
                 {remainingByDigit[i]}
               </span>
             )}

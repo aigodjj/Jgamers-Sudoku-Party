@@ -1,5 +1,20 @@
 
+@import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Huninn&family=Roboto+Mono:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
+
+@theme {
+  --text-xs: 0.825rem;
+  --text-sm: 0.9625rem;
+  --text-base: 1.1rem;
+  --font-sans:
+    "Huninn", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui,
+    sans-serif;
+  --font-mono: "Roboto Mono", "SFMono-Regular", Consolas, monospace;
+  --font-display:
+    "Fredoka", "Huninn", "Noto Sans TC", "PingFang TC",
+    "Microsoft JhengHei", system-ui, sans-serif;
+  --font-number: "Roboto Mono", "SFMono-Regular", Consolas, monospace;
+}
 
 /* ========================================
    Jgamers Sudoku Party
@@ -8,7 +23,7 @@
 
 :root {
   color-scheme: light;
-  font-synthesis: none;
+  font-synthesis: weight;
   text-rendering: optimizeLegibility;
 
   --arcade-blue: #2388f5;
@@ -34,16 +49,23 @@ html {
 
 body {
   margin: 0;
-  font-family:
-    ui-rounded,
-    "Avenir Next",
-    "Noto Sans TC",
-    "PingFang TC",
-    "Microsoft JhengHei",
-    system-ui,
-    sans-serif;
+  font-family: var(--font-sans);
+  font-size: 110%;
   color: var(--arcade-ink);
   background: #eaf5ff;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
+}
+
+.tabular-nums {
+  font-family: var(--font-number);
 }
 
 button,

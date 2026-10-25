@@ -42,7 +42,7 @@ export function Sidebar() {
   return (
     <aside className="hidden w-56 shrink-0 self-start rounded-3xl border-2 border-sky-100 bg-white/95 p-3 shadow-[0_5px_0_rgb(35_83_156_/_10%)] xl:block">
       <div className="mb-3 rounded-2xl bg-gradient-to-r from-sky-500 to-blue-600 px-4 py-3 text-white shadow-[0_3px_0_#2457b7]">
-        <div className="text-[10px] font-black uppercase tracking-[0.18em] text-sky-100">
+        <div className="text-[11px] font-black uppercase tracking-[0.18em] text-sky-100">
           JGAMERS PARTY
         </div>
         <div className="mt-1 text-sm font-black">
@@ -97,7 +97,7 @@ export function Sidebar() {
         <p className="text-xs font-black text-sky-700">
           PLAY · PUZZLE · PARTY
         </p>
-        <p className="mt-1 text-[10px] font-semibold text-slate-500">
+        <p className="mt-1 text-[11px] font-semibold text-slate-500">
           Sudoku fun with friends!
         </p>
       </div>
