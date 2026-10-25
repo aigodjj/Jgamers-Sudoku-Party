@@ -43,7 +43,7 @@ const TRACK_KEY = "jgamers-music-track";
 export function MusicProvider({ children }: { children: ReactNode }) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [volume, setVolumeState] = useState(0.25);
+  const [volume, setVolumeState] = useState(0.8);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [hydrated, setHydrated] = useState(false);
 
