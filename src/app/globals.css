@@ -1,20 +1,314 @@
+
 @import "tailwindcss";
 
-:root { color-scheme: light; font-synthesis: none; text-rendering: optimizeLegibility; }
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-body { margin: 0; font-family: ui-rounded, "Avenir Next", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif; }
-button, a { -webkit-tap-highlight-color: transparent; }
-button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid #c4b5fd; outline-offset: 2px; }
-::selection { background: #ddd6fe; color: #4c1d95; }
+/* ========================================
+   Jgamers Sudoku Party
+   Colorful Japanese Arcade Party Theme
+   ======================================== */
 
-.app-shell { background: radial-gradient(ellipse at top, #f4eaff 0%, #fff8fc 44%, #f3f7ff 100%); }
-.site-header { background-color: rgb(255 250 255 / 0.9); }
-html[data-theme="dark"] body { background: #111827; color: #e5e7eb; }
-html[data-theme="dark"] .app-shell { background: #111827; }
-html[data-theme="dark"] .site-header { background-color: rgb(17 24 39 / 0.92); border-color: #374151; }
-html[data-theme="dark"] .bg-white, html[data-theme="dark"] .bg-white\/90 { background-color: #1f2937 !important; }
-html[data-theme="dark"] .bg-slate-50, html[data-theme="dark"] .bg-slate-100 { background-color: #273449 !important; }
-html[data-theme="dark"] .text-slate-800, html[data-theme="dark"] .text-slate-700 { color: #f3f4f6 !important; }
-html[data-theme="dark"] .text-slate-600, html[data-theme="dark"] .text-slate-500 { color: #cbd5e1 !important; }
-html[data-theme="dark"] .border-slate-100, html[data-theme="dark"] .border-white { border-color: #374151 !important; }
+:root {
+  color-scheme: light;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+
+  --arcade-blue: #2388f5;
+  --arcade-blue-dark: #1764cf;
+  --arcade-cyan: #63dcff;
+  --arcade-yellow: #ffdc4a;
+  --arcade-pink: #ff78b7;
+  --arcade-green: #63df9a;
+  --arcade-purple: #a78bfa;
+  --arcade-ink: #24345b;
+  --arcade-border: #d6e6ff;
+  --arcade-white: #ffffff;
+  --arcade-shadow: 0 5px 0 rgb(35 83 156 / 16%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family:
+    ui-rounded,
+    "Avenir Next",
+    "Noto Sans TC",
+    "PingFang TC",
+    "Microsoft JhengHei",
+    system-ui,
+    sans-serif;
+  color: var(--arcade-ink);
+  background: #eaf5ff;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+  transition:
+    transform 150ms ease,
+    box-shadow 150ms ease,
+    filter 150ms ease;
+}
+
+button:active {
+  transform: translateY(2px) scale(0.985);
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid #ffbd43;
+  outline-offset: 3px;
+}
+
+a {
+  transition: color 150ms ease;
+}
+
+::selection {
+  background: #ffe16b;
+  color: #24345b;
+}
+
+/* Main background */
+
+.app-shell {
+  min-height: 100vh;
+  background:
+    radial-gradient(
+      circle at 8% 12%,
+      rgb(255 255 255 / 85%) 0 3px,
+      transparent 4px
+    ),
+    radial-gradient(
+      circle at 90% 20%,
+      rgb(255 255 255 / 75%) 0 4px,
+      transparent 5px
+    ),
+    radial-gradient(
+      ellipse at top,
+      #b8eaff 0%,
+      #eaf5ff 45%,
+      #fff3fa 100%
+    );
+}
+
+/* Header */
+
+.site-header {
+  background: rgb(255 255 255 / 92%);
+  border-bottom: 2px solid #d8eaff;
+  box-shadow: 0 4px 16px rgb(40 93 165 / 8%);
+  backdrop-filter: blur(14px);
+}
+
+/* White panels and cards */
+
+.app-shell .rounded-xl,
+.app-shell .rounded-2xl,
+.app-shell .rounded-3xl {
+  border-radius: 20px;
+}
+
+.app-shell .bg-white,
+.app-shell .bg-white\/90 {
+  border-color: var(--arcade-border);
+}
+
+/* Buttons */
+
+.app-shell button {
+  border-radius: 14px;
+  font-weight: 700;
+}
+
+.app-shell button:not(:disabled):hover {
+  filter: brightness(1.04);
+}
+
+.app-shell button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+/* Inputs */
+
+.app-shell input,
+.app-shell select,
+.app-shell textarea {
+  border-radius: 12px;
+}
+
+.app-shell input,
+.app-shell select,
+.app-shell textarea {
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.app-shell input:focus,
+.app-shell select:focus,
+.app-shell textarea:focus {
+  border-color: var(--arcade-blue);
+  box-shadow: 0 0 0 3px rgb(35 136 245 / 15%);
+}
+
+/* Optional reusable arcade styles */
+
+.arcade-panel {
+  background: var(--arcade-white);
+  border: 2px solid var(--arcade-border);
+  border-radius: 22px;
+  box-shadow: var(--arcade-shadow);
+}
+
+.arcade-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 22px;
+  border: 2px solid rgb(255 255 255 / 75%);
+  border-radius: 16px;
+  background: var(--arcade-blue);
+  color: white;
+  font-weight: 800;
+  box-shadow: 0 4px 0 var(--arcade-blue-dark);
+  transition:
+    transform 150ms ease,
+    box-shadow 150ms ease,
+    filter 150ms ease;
+}
+
+.arcade-button:hover {
+  filter: brightness(1.08);
+  transform: translateY(-2px);
+}
+
+.arcade-button:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--arcade-blue-dark);
+}
+
+.arcade-button--yellow {
+  background: var(--arcade-yellow);
+  color: #60420b;
+  box-shadow: 0 4px 0 #e4ad26;
+}
+
+.arcade-button--pink {
+  background: var(--arcade-pink);
+  color: #69254a;
+  box-shadow: 0 4px 0 #e45498;
+}
+
+.arcade-button--green {
+  background: var(--arcade-green);
+  color: #14583a;
+  box-shadow: 0 4px 0 #35b875;
+}
+
+.arcade-button--purple {
+  background: var(--arcade-purple);
+  color: #ffffff;
+  box-shadow: 0 4px 0 #8062d8;
+}
+
+/* Sudoku grid helpers */
+
+.sudoku-cell-selected {
+  background: #c8eaff;
+  box-shadow: inset 0 0 0 2px var(--arcade-blue);
+}
+
+.sudoku-cell-highlighted {
+  background: #edf7ff;
+}
+
+.sudoku-cell-error {
+  background: #ffe0e8;
+  color: #d92755;
+}
+
+/* Dark mode */
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+html[data-theme="dark"] body {
+  background: #121a31;
+  color: #edf3ff;
+}
+
+html[data-theme="dark"] .app-shell {
+  background:
+    radial-gradient(ellipse at top, #253e68 0%, #17243f 48%, #121a31 100%);
+}
+
+html[data-theme="dark"] .site-header {
+  background-color: rgb(20 30 52 / 94%);
+  border-color: #35496d;
+}
+
+html[data-theme="dark"] .bg-white,
+html[data-theme="dark"] .bg-white\/90 {
+  background-color: #24334f !important;
+  border-color: #3c5277;
+}
+
+html[data-theme="dark"] .bg-slate-50,
+html[data-theme="dark"] .bg-slate-100 {
+  background-color: #293954 !important;
+}
+
+html[data-theme="dark"] .text-slate-900,
+html[data-theme="dark"] .text-slate-800,
+html[data-theme="dark"] .text-slate-700 {
+  color: #f3f6ff !important;
+}
+
+html[data-theme="dark"] .text-slate-600,
+html[data-theme="dark"] .text-slate-500 {
+  color: #c5d3ed !important;
+}
+
+html[data-theme="dark"] .border-slate-100,
+html[data-theme="dark"] .border-white {
+  border-color: #3c4e6d !important;
+}
+
+html[data-theme="dark"] .arcade-panel {
+  background: #24334f;
+  border-color: #3c5277;
+  color: #edf3ff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
