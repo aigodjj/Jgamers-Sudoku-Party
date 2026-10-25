@@ -1,4 +1,3 @@
-
 "use client";
 
 import Link from "next/link";
@@ -14,6 +13,7 @@ import {
   UserRound,
 } from "lucide-react";
 import { useT } from "@/i18n";
+import { MusicQuickControl } from "@/components/audio/MusicQuickControl";
 
 const navItems = [
   { href: "/", key: "nav.home", Icon: Home, color: "blue" },
@@ -55,7 +55,7 @@ export function Sidebar() {
           const active =
             href === "/"
               ? pathname === "/"
-              : pathname === href || pathname.startsWith(`${href}/`);
+              : pathname === href || pathname.startsWith(href + "/");
 
           return (
             <Link
@@ -88,8 +88,15 @@ export function Sidebar() {
         })}
       </nav>
 
+      {/* 背景音樂快捷控制 */}
+      <div className="mt-3 border-t border-slate-200 pt-3 dark:border-slate-700">
+        <MusicQuickControl />
+      </div>
+
       <div className="mt-4 rounded-2xl border-2 border-dashed border-sky-200 bg-sky-50 px-3 py-3 text-center">
-        <p className="text-xs font-black text-sky-700">PLAY · PUZZLE · PARTY</p>
+        <p className="text-xs font-black text-sky-700">
+          PLAY · PUZZLE · PARTY
+        </p>
         <p className="mt-1 text-[10px] font-semibold text-slate-500">
           Sudoku fun with friends!
         </p>
